@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+require('dotenv').config(); 
 
 module.exports = {
   entry: './src/root.tsx',
@@ -15,9 +16,7 @@ module.exports = {
   },
   output: {
     filename: 'microfrontend.js',
-    library: {
-      type: 'system',
-    },
+    library: { type: 'system' },
     path: path.resolve(__dirname, 'dist'),
     publicPath: 'http://localhost:3001/',
     clean: true,
@@ -28,21 +27,13 @@ module.exports = {
   externals: ['react', 'react-dom'],
   module: {
     rules: [
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: 'babel-loader',
-      },
+      { test: /\.tsx?$/, exclude: /node_modules/, use: 'babel-loader' },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-    }),
+    new HtmlWebpackPlugin({ template: './public/index.html' }),
     new webpack.DefinePlugin({
-      'process.env': {
-        NEXT_PUBLIC_API_URL: JSON.stringify('https://bytebank-api-wz4i.onrender.com/transactions'),
-      },
+      'process.env.NEXT_PUBLIC_API_URL': JSON.stringify(process.env.NEXT_PUBLIC_API_URL),
     }),
   ],
 };
