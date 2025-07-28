@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "webpack serve --config webpack.dev.config.cjs",
-    "build": "webpack --config webpack.prod.config.cjs"
+    "build": "webpack --config webpack.prod.config.cjs",
+    "docker:build": "docker build -t bytebank-investments .",
+    "docker:start": "docker run -p 3001:80 bytebank-investments"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
