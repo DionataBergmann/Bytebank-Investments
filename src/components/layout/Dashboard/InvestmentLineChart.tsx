@@ -17,36 +17,40 @@ type Props = {
 }
 
 export default function InvestmentLineChart({ transactions }: Props) {
-  const dataByMonth = useMemo(() => {
-    const grouped: Record<string, { entrada: number; saida: number }> = {}
+ const dataByMonth = useMemo(() => {
+  const grouped: Record<string, { entrada: number; saida: number }> = {}
 
-    for (const t of transactions) {
-      const [day, month, year] = t.date.split('/')
-      const key = `${month}/${year}`
+  for (const t of transactions) {
+    const dateObj = new Date(t.date)
+    if (isNaN(dateObj.getTime())) continue
 
-      if (!grouped[key]) {
-        grouped[key] = { entrada: 0, saida: 0 }
-      }
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+    const year = dateObj.getFullYear()
+    const key = `${month}/${year}`
 
-      if (t.type === 'Entrada') {
-        grouped[key].entrada += t.value
-      } else if (t.type === 'Saída') {
-        grouped[key].saida += Math.abs(t.value)
-      }
+    if (!grouped[key]) {
+      grouped[key] = { entrada: 0, saida: 0 }
     }
 
-    return Object.entries(grouped)
-      .map(([month, { entrada, saida }]) => ({
-        month,
-        entrada,
-        saida
-      }))
-      .sort((a, b) => {
-        const [ma, ya] = a.month.split('/').map(Number)
-        const [mb, yb] = b.month.split('/').map(Number)
-        return ya === yb ? ma - mb : ya - yb
-      })
-  }, [transactions])
+    if (t.type === 'Entrada') {
+      grouped[key].entrada += t.value
+    } else if (t.type === 'Saída') {
+      grouped[key].saida += Math.abs(t.value)
+    }
+  }
+
+  return Object.entries(grouped)
+    .map(([month, { entrada, saida }]) => ({
+      month,
+      entrada,
+      saida
+    }))
+    .sort((a, b) => {
+      const [ma, ya] = a.month.split('/').map(Number)
+      const [mb, yb] = b.month.split('/').map(Number)
+      return ya === yb ? ma - mb : ya - yb
+    })
+}, [transactions])
 
   return (
     <div className="bg-white rounded-lg p-6 w-full">
