@@ -17,15 +17,13 @@ type Props = {
 }
 
 export default function InvestmentLineChart({ transactions }: Props) {
- const dataByMonth = useMemo(() => {
+const dataByMonth = useMemo(() => {
   const grouped: Record<string, { entrada: number; saida: number }> = {}
 
   for (const t of transactions) {
-    const dateObj = new Date(t.date)
-    if (isNaN(dateObj.getTime())) continue
+    if (!t.date || !t.date.includes('/')) continue
 
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0')
-    const year = dateObj.getFullYear()
+    const [day, month, year] = t.date.split('/')
     const key = `${month}/${year}`
 
     if (!grouped[key]) {
