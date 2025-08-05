@@ -44,7 +44,7 @@ export default function MainLayout({ children }: Props) {
       )}
 
       <div className="w-full max-w-6xl mx-auto flex gap-4 px-4 py-6">
-        <aside className="hidden lg:block w-50 bg-white rounded-lg shadow-md p-8 text-center">
+       <aside className="hidden lg:block w-50 bg-white rounded-lg shadow-md p-8 text-center sticky top-2 self-start ">
           <nav className="flex flex-col gap-4 text-sm">
             {menuItems}
           </nav>
